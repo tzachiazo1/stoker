@@ -24,7 +24,13 @@ let stockData = [
         "Change": "-0.850006",
         "LastTradePriceOnly": "69.620003"
     }
+
 ];
+
+let uiStatus = {
+    presentChangeInPercent: true,
+    // presentChangeIn : 'regular',
+}
 
 
 function createStockList() {
@@ -33,6 +39,7 @@ function createStockList() {
 
 
 function createMainHeader() {
+
 
     return `
     <header class="main_header">
@@ -56,11 +63,13 @@ function creteStockEntry(elm) {
 
     let trend = (percentChange > 0) ? "positive_trend" : "negative_trend";
 
+    let stockChange = (uiStatus.presentChangeInPercent) ? elm.PercentChange : parseFloat(elm.Change).toFixed(2);
+
     return `<li class="stock_line">
                 <span class="stock_line_name"> ${elm.Symbol} (${elm.Name})</span>
                 <div class="sock_line_right_panel">
                 <span class ="stock_line_lastPrice"> ${lastTradePrice}</span>
-                <button class="stock_line_change_btn ${trend}">${elm.PercentChange}</button>
+                <button class="stock_line_change_btn ${trend}">${stockChange}</button>
                 <div class="stock_line_move_panel">
                     <button class="sock_line_up_button icon-arrow"></button>
                     <button class="sock_line_down_button icon-arrow"></button>
@@ -72,8 +81,18 @@ function creteStockEntry(elm) {
 function createStockListPage(container) {
     container.innerHTML = createMainHeader() + createStockList();
 
-
+    container.getElementsByClassName("stocks_list")[0].addEventListener('click', stockClickCB);
 }
 
+function stockClickCB(ev) {
+
+    if (!ev.target.classList.contains('stock_line_change_btn')) {
+        return
+    }
+    console.log('CLICKEs');
+    uiStatus.presentChangeInPercent = !uiStatus.presentChangeInPercent;
+
+    createStockListPage(document.getElementsByClassName('app_content')[0]);
+}
 
 createStockListPage(document.getElementsByClassName('app_content')[0]);
