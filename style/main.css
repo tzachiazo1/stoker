@@ -1,0 +1,133 @@
+
+html{
+    height: 100%;
+    width: 100%;
+    font-size: 100%;
+    box-sizing: border-box;
+    font-family: Avenir-Light;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+
+body{
+    width: 100%;
+    height: 100%;
+    background-color: #f0f4f7;
+}
+
+
+.app_content{
+    background-color: white;
+    border-radius: 10px;
+    width: 1300px;
+    margin: 56px auto;
+
+}
+
+.main_header{
+    width: 100%;
+    padding: 29px;
+    height: 128px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.main_title{
+    color: #41bf15;
+    font-size: 2.4rem;
+}
+
+.main_header_action_list{
+    display: flex;
+    list-style: none;
+    margin: 0;
+}
+
+.action_button{
+    padding: 0 10px;
+    background-color: transparent;
+    border: none;
+}
+
+
+/*stock entries*/
+.stocks_list{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.stock_line{
+    height: 115px;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    color: #59737c;
+    justify-content: space-between;
+    border-top: 1px solid #e5e5e5;
+}
+
+.stock_line_name{
+    margin-left: 29px;
+}
+
+.sock_line_right_panel{
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.stock_line_move_panel{
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    margin-right: 29px;
+    color: #ababab;
+}
+
+.stock_line_change_btn{
+    margin-right: 26px;
+    font-size: 2.125rem;
+    border-radius: 10px;
+    border: none;
+    padding: 5px 10px;
+    color: white;
+    font-weight: 200;
+}
+
+.stock_line_lastPrice{
+    margin-right: 31px;
+}
+
+.positive_trend{
+    background-color: #63da39;
+}
+
+.negative_trend{
+    background-color: #ff4f46;
+}
+
+.sock_line_up_button{
+    font-size: 1rem;
+    font-family: Glyphter, serif;
+    background-color: transparent;
+    color: #ababab;
+    padding-bottom: 0;
+    border: none;
+}
+
+.sock_line_down_button{
+    vertical-align: bottom;
+    padding-top: 0;
+    font-size: 1rem;
+    border: none;
+    color: #ababab;
+    background-color: transparent;
+    font-family: Glyphter, serif;
+    transform: scaleY(-1);
+    text-align: center;
+}
