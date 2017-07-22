@@ -51,6 +51,8 @@ body{
     padding: 0 10px;
     background-color: transparent;
     border: none;
+    font-size: 2.4rem;
+    color: #ababab;
 }
 
 
@@ -97,6 +99,7 @@ body{
     padding: 5px 10px;
     color: white;
     font-weight: 200;
+    width: 4.5em;
 }
 
 .stock_line_lastPrice{
@@ -105,6 +108,7 @@ body{
 
 .positive_trend{
     background-color: #63da39;
+
 }
 
 .negative_trend{
@@ -130,4 +134,8 @@ body{
     font-family: Glyphter, serif;
     transform: scaleY(-1);
     text-align: center;
+}
+
+.icon_arrow_disable{
+    color: rgba(171, 171, 171, 0.2);
 }
