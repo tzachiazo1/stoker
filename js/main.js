@@ -1,6 +1,8 @@
 /**
  * Created by tzachia on 18/07/2017.
  */
+
+(function(){
 let stockData = [
     {
         "Symbol": "YHOO",
@@ -38,13 +40,15 @@ let uiStatus = {
 }
 
 
+function createStockListContent() {
+    return `<div class="page_content">${createStockList}</div>`;
+}
+
 function createStockList() {
     return `<ul class="stocks_list">${stockData.map(creteStockEntry).join('')}</ul>`;
 }
 
-
 function createMainHeader() {
-
 
     return `
     <header class="main_header">
@@ -84,7 +88,7 @@ function creteStockEntry(elm, index, arr) {
 }
 
 function createStockListPage(container) {
-    container.innerHTML = createMainHeader() + createStockList();
+    container.innerHTML = createMainHeader() + createStockListContent();
     container.getElementsByClassName("stocks_list")[0].addEventListener('click', stockClickCB);
 }
 
@@ -112,3 +116,5 @@ function moveStockInList(stockKey, direction) {
 }
 
 createStockListPage(document.getElementsByClassName('app_content')[0]);
+
+})();
