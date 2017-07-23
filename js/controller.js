@@ -1,50 +1,17 @@
 /**
  * Created by tzachia on 18/07/2017.
  */
+window.Stokr = window.Stokr || {};
 
 (function () {
-    let stockData = [
-        {
-            "Symbol": "YHOO",
-            "Name": "Yahoo! Inc.",
-            "Change": "0.279999",
-            "PercentChange": "+1.11%",
-            "LastTradePriceOnly": "50.599998"
-
-        },
-        {
-            "Symbol": "WIX",
-            "Name": "Wix.com Ltd.",
-            "Change": "0.750000",
-            "PercentChange": "+1.51%",
-            "LastTradePriceOnly": "76.099998"
-        },
-        {
-            "Symbol": "MSFT",
-            "Name": "Microsoft Corporation",
-            "PercentChange": "-2.09%",
-            "Change": "-0.850006",
-            "LastTradePriceOnly": "69.620003"
-        }
-
-    ];
-
-    let enum_direction = {
-        up: -1,
-        down: 1
-    }
-
-    let uiStatus = {
-        presentChangeInPercent: true,
-        // presentChangeIn : 'regular',
-    }
+    let model = window.Stokr.Model;
+    let view = window.Stokr.View;
 
 
     function createStockList() {
-        return `<ul class="stocks_list">${stockData.map(creteStockEntry).join('')}</ul>`;
+        let data = model.getStocks();
+        return `<ul class="stocks_list">${data.map(creteStockEntry).join('')}</ul>`;
     }
-
-
 
     function createMainHeader() {
 
@@ -67,7 +34,8 @@
         let percentChange = parseFloat(elm.PercentChange).toFixed(2);
 
         let trend = (percentChange > 0) ? "positive_trend" : "negative_trend";
-        let stockChange = (uiStatus.presentChangeInPercent) ? elm.PercentChange : parseFloat(elm.Change).toFixed(2);
+
+        let stockChange = (model.getChangeFormat() === 'percent') ? elm.PercentChange : parseFloat(elm.Change).toFixed(2);
         let disableUpButton = (index === 0);
         let disableDownButton = (index === arr.length - 1);
 
@@ -92,25 +60,16 @@
 
     function stockClickCB(ev) {
         if (ev.target.classList.contains('stock_line_change_btn')) {
-            uiStatus.presentChangeInPercent = !uiStatus.presentChangeInPercent;
+            model.toggleChangeFormat()
         }
         else if (ev.target.classList.contains('sock_line_up_button')) {
-            moveStockInList(ev.target.dataset.symbol, enum_direction.up);
+            model.moveStockPosition(ev.target.dataset.symbol, model.direction.up);
         }
         else if (ev.target.classList.contains('sock_line_down_button')) {
-            moveStockInList(ev.target.dataset.symbol, enum_direction.down);
+            model.moveStockPosition(ev.target.dataset.symbol, model.direction.down);
         }
 
         createStockListPage(document.getElementsByClassName('app_content')[0]);
-    }
-
-    function moveStockInList(stockKey, direction) {
-        let keyIndex = stockData.findIndex(function (elm) {
-            return stockKey === elm.Symbol;
-        });
-        let newIndex = keyIndex + direction;
-        let removedStock = stockData.splice(keyIndex, 1);
-        stockData.splice(newIndex, 0, removedStock[0]);
     }
 
     createStockListPage(document.getElementsByClassName('app_content')[0]);
