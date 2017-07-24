@@ -3,17 +3,14 @@
 
 (function () {
     'use strict';
-
     window.Stokr = window.Stokr || {};
 
-    let changePresentationOptions = ['percent', 'number'];
-    let status = {
+    let state = {
         uiStatus: {
             presentationIndex: 0,
-            currentChangePresentation: changePresentationOptions[0]
         },
 
-        stockData: [
+        stocksData: [
             {
                 "Symbol": "YHOO",
                 "Name": "Yahoo! Inc.",
@@ -42,39 +39,13 @@
 
 
     //******************** Public methods ************************
-    function getStocks() {
-        return status.stockData;
+    function getState() {
+        return state;
     }
-
-    function getChangeFormat() {
-        return status.uiStatus.currentChangePresentation;
-    }
-
-    function toggleChangeFormat() {
-        status.uiStatus.presentationIndex = (status.uiStatus.presentationIndex + 1) % changePresentationOptions.length;
-        status.uiStatus.currentChangePresentation = status.uiStatus.currentChangePresentation = changePresentationOptions[status.uiStatus.presentationIndex];
-    }
-
-    function moveStockPosition(stockKey, direction){
-        //debugger;
-        let keyIndex = status.stockData.findIndex(function (elm) {
-            return stockKey === elm.Symbol;
-        });
-        let newIndex = keyIndex + direction;
-        let removedStock = status.stockData.splice(keyIndex, 1);
-        status.stockData.splice(newIndex, 0, removedStock[0]);
-    }
-
     //****************************************************************
 
-
     window.Stokr.Model = {
-        getStocks,
-        getChangeFormat,
-        toggleChangeFormat,
-        moveStockPosition,
-
-        direction: {'up' : -1 , 'down' : 1},
+        getState,
     }
 
 })();
