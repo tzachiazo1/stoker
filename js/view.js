@@ -20,14 +20,15 @@
         ctrl.toggleChangeFormat()
     }
 
-    function createMainHeader() {
+    function createMainHeader(uiStatus) {
+        let filterSelected = uiStatus.isFilterOpen ? 'action_active' : '';
         return `
     <header class="main_header">
         <h1 class="main_title">Stoker</h1>
         <ul class="main_header_action_list">
           <li><a class="icon-search action_button main_header_search" data-actionname ="search" href="#search"></a></li>
           <li><button class="icon-refresh action_button main_header_refresh" data-actionname ="refresh"></button></li>
-          <li><button class="icon-filter action_button main_header_filter" data-actionname ="filter"></button></li>
+          <li><button class="icon-filter action_button main_header_filter ${filterSelected}" data-actionname ="filter" ></button></li>
           <li><button class="icon-settings action_button main_header_settings" data-actionname ="settings"></button></li>
         </ul>
         
@@ -110,9 +111,9 @@
                           </div>
                           <div class="form_second_col">
                               <label for="byRangeFrom">By Range: From</label>
-                              <input type="number"  id="byRangeFrom" name="byRangeFrom" value="${uiState.filterParameters.byRangeFrom}">
+                              <input type="number"  id="byRangeFrom" name="byRangeFrom" value="${uiState.filterParameters.byRangeFrom}" step="0.10" min="0" max="100">
                               <label for="byRangeTo">By Range: To</label>
-                              <input type="number" id="byRangeTo" name="byRangeTo" value="${uiState.filterParameters.byRangeTo}">
+                              <input type="number" id="byRangeTo" name="byRangeTo" value="${uiState.filterParameters.byRangeTo}" step="0.10" min="0" max="100">
                           </div>
                           
                           <input class="apply_button" id="apply_button" type="submit" value="Apply">
@@ -153,7 +154,7 @@
         let container = document.getElementsByClassName('app_content')[0];
 
         if(!hash || hash === 'home'){
-            container.innerHTML = createMainHeader() + createFilter(uiState) + createStockList(stockData, uiState);
+            container.innerHTML = createMainHeader(uiState) + createFilter(uiState) + createStockList(stockData, uiState);
             addEventListeners(container);
         }else if(hash == 'search'){
             container.innerHTML = 'searching';

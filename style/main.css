@@ -38,6 +38,8 @@ body{
     justify-content: space-between;
 }
 
+
+
 .main_title{
     color: #41bf15;
     font-size: 2.4rem;
@@ -55,6 +57,11 @@ body{
     border: none;
     font-size: 2.4rem;
     color: #ababab;
+    padding-top: 3px;
+}
+
+.action_active{
+    color : #41bf15;
 }
 
 
@@ -160,16 +167,19 @@ body{
 
 .filter_form input , .filter_form select{
     font-size: 1.625rem;
+
 }
 
 .form_first_col input,  .form_first_col select{
     width: 66.66%;
     border-radius: 10px;
+    border: 1px solid #e0e0e0;
 }
 
 .form_second_col input{
     width: 56.66%;
     border-radius: 10px;
+    border: 1px solid #e0e0e0;
 }
 
 .form_first_col{
@@ -194,7 +204,9 @@ body{
     background-color: #41bf15;
     border: 2px solid #247906;
     border-radius: 100%;
-    padding: 1.6em;
+    /*padding: 1.6em;*/
+    width: 5.3em;
+    height: 5em;
 
 }
 
