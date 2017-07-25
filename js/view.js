@@ -13,15 +13,22 @@
         'number': 1,
     }
 
+    window.addEventListener('hashchange', hashchangeHandler);
+    
+    function hashchangeHandler(){
+        let ctrl = window.Stokr.Controller;
+        ctrl.toggleChangeFormat()
+    }
+
     function createMainHeader() {
         return `
     <header class="main_header">
         <h1 class="main_title">Stoker</h1>
         <ul class="main_header_action_list">
-          <li><button class="icon-search action_button main_header_search"></button></li>
-          <li><button class="icon-refresh action_button main_header_refresh"></button></li>
-          <li><button class="icon-filter action_button main_header_filter"></button></li>
-          <li><button class="icon-settings action_button main_header_settings"></button></li>
+          <li><a class="icon-search action_button main_header_search" data-actionname ="search" href="#search"></a></li>
+          <li><button class="icon-refresh action_button main_header_refresh" data-actionname ="refresh"></button></li>
+          <li><button class="icon-filter action_button main_header_filter" data-actionname ="filter"></button></li>
+          <li><button class="icon-settings action_button main_header_settings" data-actionname ="settings"></button></li>
         </ul>
         
       </header>
@@ -42,6 +49,7 @@
         let trend = (stock.Change > 0) ? "positive_trend" : "negative_trend";
         let disableUpButton = (index === 0);
         let disableDownButton = (index === arr.length - 1);
+        let arrowVisibility = uiStatus.isFilterOpen ? "hidden_element" : "";
 
         return `<li class="stock_line">
 
@@ -49,9 +57,9 @@
                 <div class="sock_line_right_panel">
                 <span class ="stock_line_lastPrice"> ${trimNumber(stock.LastTradePriceOnly)}</span>
                 <button class="stock_line_change_btn ${trend}">${stockChange}</button>
-                <div class="stock_line_move_panel">
+                <div class="stock_line_move_panel ${arrowVisibility}">
                     <button class="sock_line_up_button icon-arrow ${(index === 0) ? 'icon_arrow_disable' : ''}" ${disableUpButton ? 'disabled' : ''} data-symbol="${stock.Symbol}"></button>
-                    <button class="sock_line_down_button icon-arrow ${(index === arr.length - 1) ? 'icon_arrow_disable' : ''}" ${disableDownButton ? 'disabled' : ''} data-symbol="${stock.Symbol}"></button>
+                    <button class="sock_line_down_button icon-arrow ${(index === arr.length - 1) ? 'icon_arrow_disable' : ''}" ${disableDownButton ? 'disabled' : ''} data-symbol="${stock.Symbol}" ></button>
                 </div>
                 </div>
             </li>`;
@@ -68,19 +76,77 @@
         else if (ev.target.classList.contains('sock_line_down_button')) {
             ctrl.moveStockPosition(ev.target.dataset.symbol, ctrl.direction.down);
         }
+    }
 
+    function actionClickCB(ev) {
+        let ctrl = window.Stokr.Controller;
+        if (ev.target.dataset.actionname === 'filter') {
+            ctrl.toggleFilter();
+        }
+    }
+
+    function createFilter(uiState) {
+        if (uiState.isFilterOpen) {
+            return ``;
+        }
+
+        return (`<section>
+                  <form id="filter_form">
+                  <div>
+                  <label for="firstname">By Name</label> <input type="text" id="firstname"name="firstname">
+                  <label for="trend">By Trend</label> 
+                  <select id="trend" name="trend">
+                  <option>All</option>
+                  <option>Losing</option>
+                  <option>Gaining</option>
+                  </select>
+                  <label for="byRangeFrom">By Range: From</label> <input type="number"  id="byRangeFrom" name="byRangeFrom">
+                  <label for="byRangeTo">By Range: To</label> <input type="number" id="byRangeTo" name="byRangeTo">
+                  </div>
+                  <input id="apply_button" type="submit" value="Apply">
+                  </form>
+                  </section>`);
+    }
+
+    function addEventListeners(container) {
+        //Stock Entries:
+        container.querySelector(".stocks_list").addEventListener('click', stockClickCB);
+        //Header Actions:
+        container.querySelector(".main_header_action_list").addEventListener('click', actionClickCB);
+        //Apply:
+        let filterForm = container.querySelector("#filter_form")
+        if (filterForm) {
+            filterForm.addEventListener('submit', submitFormCB);
+        }
+    }
+    
+    function submitFormCB(ev){
+        let ctrl = window.Controller;
+        ctrl.filter();
+        ev.preventDefault();
     }
 
     //******************** Public methods ************************
 
-    function render(stockData, state) {
+    function render(stockData, uiState) {
+        let hash = window.location.hash.slice(1);
+
         let container = document.getElementsByClassName('app_content')[0];
-        container.innerHTML = createMainHeader() + createStockList(stockData, state);
-        container.getElementsByClassName("stocks_list")[0].addEventListener('click', stockClickCB);
+
+        if(!hash || hash === 'home'){
+            container.innerHTML = createMainHeader() + createFilter(uiState) + createStockList(stockData, uiState);
+            addEventListeners(container);
+        }else if(hash == 'search'){
+            container.innerHTML = 'searching';
+        }else{
+            container.innerHTML = "404";
+        }
+
     }
 
-    //****************************************************************
 
+    //****************************************************************
+    
     window.Stokr.View = {
         render,
     }

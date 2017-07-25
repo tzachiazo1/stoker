@@ -11,7 +11,9 @@ html{
     box-sizing: inherit;
 }
 
-
+.hidden_element{
+    visibility: hidden;
+}
 body{
     width: 100%;
     height: 100%;

@@ -50,12 +50,28 @@ window.Stokr = window.Stokr || {};
             .catch(console.error)
     }
 
+    function toggleFilter(){
+        model.getState().uiStatus.isFilterOpen = !model.getState().uiStatus.isFilterOpen;
+        callRender();
+    }
+
+    function filter(){
+
+    }
+
+    function onHashChanged(){
+        callRender();
+    }
+
 
     //***************************
     window.Stokr.Controller = {
         toggleChangeFormat,
         moveStockPosition,
         direction: {'up': -1, 'down': 1},
+        toggleFilter,
+        filter,
+        onHashChanged,
     }
 
     fatchStocks();

@@ -8,6 +8,7 @@
     let state = {
         uiStatus: {
             presentationIndex: 0,
+            isFilterOpen : false,
         },
 
         stocksData: []
