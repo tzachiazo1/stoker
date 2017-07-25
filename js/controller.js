@@ -36,8 +36,6 @@ window.Stokr = window.Stokr || {};
         stockData.splice(newIndex, 0, removedStock[0]);
         callRender();
     }
-
-
     //***************************
     window.Stokr.Controller = {
         toggleChangeFormat,
