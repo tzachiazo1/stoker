@@ -9,6 +9,12 @@
         uiStatus: {
             presentationIndex: 0,
             isFilterOpen : false,
+            filterParameters : {
+                stockName : "",
+                trend : "all",
+                byRangeFrom : "",
+                byRangeTo : "",
+            }
         },
 
         stocksData: []

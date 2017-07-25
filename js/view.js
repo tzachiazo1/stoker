@@ -86,25 +86,33 @@
     }
 
     function createFilter(uiState) {
-        if (uiState.isFilterOpen) {
+        if (!uiState.isFilterOpen) {
             return ``;
         }
 
+        let selectedTrend = uiState.filterParameters.trend;
+        let allSelected = (selectedTrend === 'all')? 'selected' : '';
+        let losingSelected = (selectedTrend === 'losing')? 'selected' : '';
+        let gainingSelected = (selectedTrend === 'gaining')? 'selected' : '';
+
         return (`<section>
-                  <form id="filter_form">
-                  <div>
-                  <label for="firstname">By Name</label> <input type="text" id="firstname"name="firstname">
-                  <label for="trend">By Trend</label> 
-                  <select id="trend" name="trend">
-                  <option>All</option>
-                  <option>Losing</option>
-                  <option>Gaining</option>
-                  </select>
-                  <label for="byRangeFrom">By Range: From</label> <input type="number"  id="byRangeFrom" name="byRangeFrom">
-                  <label for="byRangeTo">By Range: To</label> <input type="number" id="byRangeTo" name="byRangeTo">
-                  </div>
-                  <input id="apply_button" type="submit" value="Apply">
-                  </form>
+                      <form id="filter_form">
+                          <div>
+                              <label for="stockname">By Name</label> 
+                              <input type="text" id="stockname" name="stockname" value="${uiState.filterParameters.stockName}">
+                              <label for="trend">By Trend</label> 
+                              <select id="trend" name="trend">
+                                  <option value="all" ${allSelected}>All</option>
+                                  <option value="losing" ${losingSelected}>Losing</option>
+                                  <option value="gaining" ${gainingSelected}>Gaining</option>
+                              </select>
+                              <label for="byRangeFrom">By Range: From</label>
+                              <input type="number"  id="byRangeFrom" name="byRangeFrom" value="${uiState.filterParameters.byRangeFrom}">
+                              <label for="byRangeTo">By Range: To</label>
+                              <input type="number" id="byRangeTo" name="byRangeTo" value="${uiState.filterParameters.byRangeTo}">
+                          </div>
+                          <input id="apply_button" type="submit" value="Apply">
+                      </form>
                   </section>`);
     }
 
@@ -121,9 +129,16 @@
     }
     
     function submitFormCB(ev){
-        let ctrl = window.Controller;
-        ctrl.filter();
         ev.preventDefault();
+        let ctrl = window.Stokr.Controller;
+        let formElements = ev.target.elements;
+
+        const stockName = formElements.stockname.value;
+        const trend = formElements.trend.value;
+        const byRangeFrom = formElements.byRangeFrom.value;
+        const byRangeTo = formElements.byRangeTo.value;
+
+        ctrl.applyFilter({stockName, trend, byRangeFrom, byRangeTo});
     }
 
     //******************** Public methods ************************

@@ -14,7 +14,43 @@ window.Stokr = window.Stokr || {};
 
     function callRender() {
         let state = model.getState();
-        view.render(state.stocksData, state.uiStatus);
+        if (state.uiStatus.isFilterOpen) {
+            let filterd = filterStocks(state.stocksData, state.uiStatus.filterParameters);
+            view.render(filterd, state.uiStatus);
+        } else {
+            view.render(state.stocksData, state.uiStatus);
+        }
+
+
+    }
+
+    function filterStocks(stocks, parameters) {
+        if (!parameters.stockName && parameters.trend === 'All' && !parameters.byRangeFrom && !parameters.byRangeTo) {
+            return stocks;
+        }
+
+        let filtered = stocks.filter((stocks) => filter(stocks, parameters));
+
+        return filtered;
+    }
+
+    function filter(stock, parameters) {
+        if(!stock.Symbol.toUpperCase().startsWith(parameters.stockName.toUpperCase()) && !stock.Name.toUpperCase().startsWith(parameters.stockName.toUpperCase())){
+            return false;
+        }
+        let trend = (stock.Change > 0) ? 'gaining' : 'losing';
+        if(parameters.trend.toUpperCase() !== 'All'.toUpperCase() && trend.toUpperCase() !== parameters.trend.toUpperCase()){
+            return false;
+        }
+
+        let dailyPercent = parseFloat(stock.PercentChange);
+        if(parameters.byRangeFrom === '' || parameters.byRangeTo === ''){
+            return true;
+        }
+        if((parseFloat(dailyPercent) < parameters.byRangeFrom || parseFloat(dailyPercent) > parameters.byRangeTo )){
+            return false;
+        }
+        return true;
     }
 
     //**** public methods ********
@@ -50,16 +86,19 @@ window.Stokr = window.Stokr || {};
             .catch(console.error)
     }
 
-    function toggleFilter(){
+    function toggleFilter() {
         model.getState().uiStatus.isFilterOpen = !model.getState().uiStatus.isFilterOpen;
         callRender();
     }
 
-    function filter(){
+    function applyFilter(filterParams) {
+        let state = model.getState();
 
+        state.uiStatus.filterParameters = filterParams;
+        callRender();
     }
 
-    function onHashChanged(){
+    function onHashChanged() {
         callRender();
     }
 
@@ -70,7 +109,7 @@ window.Stokr = window.Stokr || {};
         moveStockPosition,
         direction: {'up': -1, 'down': 1},
         toggleFilter,
-        filter,
+        applyFilter,
         onHashChanged,
     }
 
