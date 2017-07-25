@@ -12,20 +12,20 @@ window.Stokr = window.Stokr || {};
     let changePresentationOptions = ['percent', 'number'];
 
 
-    function callRender(){
+    function callRender() {
         let state = model.getState();
-        view.render(state.stocksData , state.uiStatus);
+        view.render(state.stocksData, state.uiStatus);
     }
 
     //**** public methods ********
 
-    function toggleChangeFormat(){
+    function toggleChangeFormat() {
         let state = model.getState();
         state.uiStatus.presentationIndex = (state.uiStatus.presentationIndex + 1) % changePresentationOptions.length;
         callRender();
     }
 
-    function moveStockPosition(stockKey, direction){
+    function moveStockPosition(stockKey, direction) {
         let stockData = model.getState().stocksData;
         let keyIndex = stockData.findIndex(function (elm) {
             return stockKey === elm.Symbol;
@@ -36,15 +36,29 @@ window.Stokr = window.Stokr || {};
         stockData.splice(newIndex, 0, removedStock[0]);
         callRender();
     }
+
+    function fatchStocks() {
+        fetch('mock/stocks.json')
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                return Promise.reject('Request Failed');
+            })
+            .then(model.setStocks)
+            .then(callRender)
+            .catch(console.error)
+    }
+
+
     //***************************
     window.Stokr.Controller = {
         toggleChangeFormat,
         moveStockPosition,
-        direction: {'up' : -1 , 'down' : 1},
+        direction: {'up': -1, 'down': 1},
     }
 
-    callRender();
-
+    fatchStocks();
 })();
 
 
