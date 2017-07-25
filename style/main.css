@@ -141,3 +141,60 @@ body{
 .icon_arrow_disable{
     color: rgba(171, 171, 171, 0.2);
 }
+
+/* Filter Section */
+.filter_section{
+    border-top: 1px solid #e5e5e5;
+    padding: 13px 28px;
+    display: flex;
+    align-items: center;
+
+}
+
+.filter_form{
+    display: flex;
+    font-size: 1.625rem;
+    justify-content: space-between;
+}
+
+
+.filter_form input , .filter_form select{
+    font-size: 1.625rem;
+}
+
+.form_first_col input,  .form_first_col select{
+    width: 66.66%;
+    border-radius: 10px;
+}
+
+.form_second_col input{
+    width: 56.66%;
+    border-radius: 10px;
+}
+
+.form_first_col{
+    display: flex;
+    width: 40%;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.form_second_col{
+    display: flex;
+    width: 40%;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.apply_button{
+    font-size: 1.875rem;
+    color: white;
+    background-color: #41bf15;
+    border: 2px solid #247906;
+    border-radius: 100%;
+    padding: 1.6em;
+
+}
+

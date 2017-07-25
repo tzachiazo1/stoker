@@ -95,9 +95,10 @@
         let losingSelected = (selectedTrend === 'losing')? 'selected' : '';
         let gainingSelected = (selectedTrend === 'gaining')? 'selected' : '';
 
-        return (`<section>
-                      <form id="filter_form">
-                          <div>
+        return (`<section class="filter_section">
+                      <form class="filter_form" id="filter_form">
+                          
+                          <div class="form_first_col">
                               <label for="stockname">By Name</label> 
                               <input type="text" id="stockname" name="stockname" value="${uiState.filterParameters.stockName}">
                               <label for="trend">By Trend</label> 
@@ -106,12 +107,15 @@
                                   <option value="losing" ${losingSelected}>Losing</option>
                                   <option value="gaining" ${gainingSelected}>Gaining</option>
                               </select>
+                          </div>
+                          <div class="form_second_col">
                               <label for="byRangeFrom">By Range: From</label>
                               <input type="number"  id="byRangeFrom" name="byRangeFrom" value="${uiState.filterParameters.byRangeFrom}">
                               <label for="byRangeTo">By Range: To</label>
                               <input type="number" id="byRangeTo" name="byRangeTo" value="${uiState.filterParameters.byRangeTo}">
                           </div>
-                          <input id="apply_button" type="submit" value="Apply">
+                          
+                          <input class="apply_button" id="apply_button" type="submit" value="Apply">
                       </form>
                   </section>`);
     }

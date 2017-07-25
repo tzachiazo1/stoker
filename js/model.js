@@ -8,7 +8,7 @@
     let state = {
         uiStatus: {
             presentationIndex: 0,
-            isFilterOpen : false,
+            isFilterOpen : true,
             filterParameters : {
                 stockName : "",
                 trend : "all",
