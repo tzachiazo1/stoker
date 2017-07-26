@@ -8,6 +8,7 @@ window.Stokr = window.Stokr || {};
 
     let model = window.Stokr.Model;
     let view = window.Stokr.View;
+    let domain = 'http://localhost:7000/';
 
     let changePresentationOptions = ['percent', 'number'];
 
@@ -20,8 +21,6 @@ window.Stokr = window.Stokr || {};
         } else {
             view.render(state.stocksData, state.uiStatus);
         }
-
-
     }
 
     function filterStocks(stocks, parameters) {
@@ -38,12 +37,12 @@ window.Stokr = window.Stokr || {};
         if(!stock.Symbol.toUpperCase().startsWith(parameters.stockName.toUpperCase()) && !stock.Name.toUpperCase().startsWith(parameters.stockName.toUpperCase())){
             return false;
         }
-        let trend = (stock.Change > 0) ? 'gaining' : 'losing';
+        let trend = (stock.realtime_change > 0) ? 'gaining' : 'losing';
         if(parameters.trend.toUpperCase() !== 'All'.toUpperCase() && trend.toUpperCase() !== parameters.trend.toUpperCase()){
             return false;
         }
 
-        let dailyPercent = parseFloat(stock.PercentChange);
+        let dailyPercent = parseFloat(stock.realtime_chg_percent);
         if(parameters.byRangeFrom === '' || parameters.byRangeTo === ''){
             return true;
         }
@@ -72,18 +71,23 @@ window.Stokr = window.Stokr || {};
         stockData.splice(newIndex, 0, removedStock[0]);
         callRender();
     }
-
+    
     function fatchStocks() {
-        fetch('mock/stocks.json')
+        let query = "quotes?q=" + model.getState().myStocks.join(',');
+        fetch(domain + query)
             .then((response) => {
                 if (response.ok) {
                     return response.json();
                 }
                 return Promise.reject('Request Failed');
             })
-            .then(model.setStocks)
+            .then(setStocksFromResult)
             .then(callRender)
             .catch(console.error)
+    }
+
+    function setStocksFromResult(result){
+        model.setStocks(result.query.results.quote);
     }
 
     function toggleFilter() {

@@ -17,6 +17,11 @@
             }
         },
 
+        myStocks : [
+            "WIX",
+            "MSFT"
+        ],
+
         stocksData: []
     };
 
@@ -27,6 +32,7 @@
     }
 
     function setStocks(newStocksData) {
+        debugger;
         state.stocksData = newStocksData;
     }
 

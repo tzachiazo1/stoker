@@ -42,16 +42,24 @@
     }
 
     function trimNumber(num) {
-        return parseFloat(num).toFixed(2);
+        let number = parseFloat(num).toFixed(2);
+
+        return ((number > 0)? '+' : '-') + number;
+    }
+
+    function trimNumberPercent(num) {
+        let number = parseFloat(num).toFixed(2);
+
+        return ((number > 0)? '+' : '-') + number + '%';
     }
 
     function creteStockEntry(stock, index, arr, uiStatus) {
-        let stockChange = (uiStatus.presentationIndex === changeOptions['percent']) ? stock.PercentChange : trimNumber(stock.Change);
-        let trend = (stock.Change > 0) ? "positive_trend" : "negative_trend";
+        let stockChange = (uiStatus.presentationIndex === changeOptions['percent']) ? trimNumberPercent(stock.realtime_chg_percent) : trimNumber(stock.realtime_change);
+        let trend = (stock.realtime_change > 0) ? "positive_trend" : "negative_trend";
         let disableUpButton = (index === 0);
         let disableDownButton = (index === arr.length - 1);
         let arrowVisibility = uiStatus.isFilterOpen ? "hidden_element" : "";
-
+        debugger;
         return `<li class="stock_line">
 
                 <span class="stock_line_name"> ${stock.Symbol} (${stock.Name})</span>
