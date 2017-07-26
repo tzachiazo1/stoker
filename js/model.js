@@ -9,6 +9,7 @@
         uiStatus: {
             presentationIndex: 0,
             isFilterOpen : false,
+            searchTerm: "",
             filterParameters : {
                 stockName : "",
                 trend : "all",
@@ -22,6 +23,7 @@
             "MSFT",
             "NKE",
             "GOOG",
+            "AAPL",
             "CSCO",
             "VG",
         ],

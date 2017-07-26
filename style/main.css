@@ -1,5 +1,5 @@
 
-html{
+html {
     height: 100%;
     width: 100%;
     font-size: 100%;
@@ -11,17 +11,17 @@ html{
     box-sizing: inherit;
 }
 
-.hidden_element{
+.hidden_element {
     visibility: hidden;
 }
-body{
+
+body {
     width: 100%;
     height: 100%;
     background-color: #f0f4f7;
 }
 
-
-.app_content{
+.app_content {
     background-color: white;
     border-radius: 10px;
     width: 1300px;
@@ -29,29 +29,79 @@ body{
 
 }
 
-.main_header{
+.main_header {
     width: 100%;
     padding: 29px;
     height: 128px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
 }
 
+.search_input {
+    width: 100%;
+    border-radius: 20px;
+    border: 1px solid #408be3;
+    color: #607982;
+    font-size: 1.625rem;
+    padding: 0.5em;
+    padding-left: 1em;
+    outline: none;
 
+}
 
-.main_title{
+.search_cancel {
+    color: #59737c;
+    font-size: 1.625rem;
+    text-decoration: none;
+    position: absolute;
+    right:49px;
+}
+
+.search_header {
+    width: 100%;
+    padding: 29px;
+    height: 128px;
+    display: flex;
+    align-items: center;
+}
+
+.search_ph{
+    border-top: 1px solid #e5e5e5;
+    height: 690px;
+    text-align: center;
+}
+
+.search_ph_elements{
+    display: inline-block;
+    margin-top: 150px;
+}
+
+.search_ph_image{
+    font-size: 17rem;
+    color: #d5d5d5;
+    display: block;
+    line-height: 1;
+}
+
+.search_ph_title{
+    font-size: 2rem;
+    color: #868686;
+}
+
+.main_title {
     color: #41bf15;
     font-size: 2.4rem;
 }
 
-.main_header_action_list{
+.main_header_action_list {
     display: flex;
     list-style: none;
     margin: 0;
 }
 
-.action_button{
+.action_button {
     padding: 0 10px;
     background-color: transparent;
     border: none;
@@ -60,18 +110,18 @@ body{
     padding-top: 3px;
 }
 
-.action_active{
-    color : #41bf15;
+.action_active {
+    color: #41bf15;
 }
 
-
 /*stock entries*/
-.stocks_list{
+.stocks_list {
     list-style: none;
     margin: 0;
     padding: 0;
 }
-.stock_line{
+
+.stock_line {
     height: 115px;
     font-size: 2rem;
     display: flex;
@@ -81,17 +131,17 @@ body{
     border-top: 1px solid #e5e5e5;
 }
 
-.stock_line_name{
+.stock_line_name {
     margin-left: 29px;
 }
 
-.sock_line_right_panel{
+.sock_line_right_panel {
     display: flex;
     align-items: center;
     height: 100%;
 }
 
-.stock_line_move_panel{
+.stock_line_move_panel {
     height: 100%;
     display: flex;
     flex-flow: column;
@@ -100,7 +150,7 @@ body{
     color: #ababab;
 }
 
-.stock_line_change_btn{
+.stock_line_change_btn {
     margin-right: 26px;
     font-size: 2.125rem;
     border-radius: 10px;
@@ -111,20 +161,20 @@ body{
     width: 4.5em;
 }
 
-.stock_line_lastPrice{
+.stock_line_lastPrice {
     margin-right: 31px;
 }
 
-.positive_trend{
+.positive_trend {
     background-color: #63da39;
 
 }
 
-.negative_trend{
+.negative_trend {
     background-color: #ff4f46;
 }
 
-.sock_line_up_button{
+.sock_line_up_button {
     font-size: 1rem;
     font-family: Glyphter, serif;
     background-color: transparent;
@@ -133,7 +183,7 @@ body{
     border: none;
 }
 
-.sock_line_down_button{
+.sock_line_down_button {
     vertical-align: bottom;
     padding-top: 0;
     font-size: 1rem;
@@ -145,12 +195,12 @@ body{
     text-align: center;
 }
 
-.icon_arrow_disable{
+.icon_arrow_disable {
     color: rgba(171, 171, 171, 0.2);
 }
 
 /* Filter Section */
-.filter_section{
+.filter_section {
     border-top: 1px solid #e5e5e5;
     padding: 13px 28px;
     display: flex;
@@ -158,33 +208,32 @@ body{
 
 }
 
-.filter_form{
+.filter_form {
     display: flex;
     font-size: 1.625rem;
     justify-content: space-between;
 }
 
-
-.filter_form input , .filter_form select{
+.filter_form input, .filter_form select {
     font-size: 1.625rem;
     outline: none;
 
 }
 
-.form_first_col input,  .form_first_col select{
+.form_first_col input, .form_first_col select {
     width: 66.66%;
     border-radius: 10px;
     border: 1px solid #e0e0e0;
 
 }
 
-.form_second_col input{
+.form_second_col input {
     width: 56.66%;
     border-radius: 10px;
     border: 1px solid #e0e0e0;
 }
 
-.form_first_col{
+.form_first_col {
     display: flex;
     width: 40%;
     align-items: center;
@@ -194,7 +243,7 @@ body{
 
 }
 
-.form_second_col{
+.form_second_col {
     display: flex;
     width: 40%;
     align-items: center;
@@ -203,7 +252,7 @@ body{
     padding-left: 0.5em;
 }
 
-.apply_button{
+.apply_button {
     font-size: 1.875rem;
     color: white;
     background-color: #41bf15;
@@ -214,11 +263,11 @@ body{
     height: 5em;
 }
 
-.apply_button:active{
+.apply_button:active {
     background-color: #29740f;
 }
 
-.action_button:active{
+.action_button:active {
     color: #29740f;
 }
 

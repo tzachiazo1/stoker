@@ -37,6 +37,38 @@
     `;
     }
 
+    function createSearchHeader(uiStatus) {
+
+        return `
+    <header class="main_header">
+       
+        <input class="search_input" type="text" value=${uiStatus.searchTerm}>
+        <a href="#" class="search_cancel" >Cancel</a>
+        
+      </header>
+    `;
+    }
+
+    function createSearchStockList(stocks, uiStatus) {
+        if (!uiStatus.searchTerm || stocks.length === 0) {
+            //load placeholder - search
+            let phTitle = (stocks.length === 0)? 'not found' : 'Search';
+            return `<div class="search_ph search_ph_not_found">
+                        <div class="search_ph_elements">
+                            <span class="search_ph_image icon-search-place-holder"></span>
+                            <span class="search_ph_title">${phTitle}</span>
+                        </div>
+                    </div>`;
+        }
+        else {
+            //show list of stocks
+            let createSearchStockEntryWithStatus = (stock, index, arr) => creteSearchStockEntry(stock, index, arr, uiStatus);
+            return `<ul class="stocks_list">${stocks.map(createSearchStockEntryWithStatus).join('')}</ul>`;
+        }
+        // let createStockEntryWithStatus = (stock, index, arr) => creteStockEntry(stock, index, arr, state);
+        //return `<ul class="stocks_list">${data.map(createStockEntryWithStatus).join('')}</ul>`;
+    }
+
     function createStockList(data, state) {
         let createStockEntryWithStatus = (stock, index, arr) => creteStockEntry(stock, index, arr, state);
         return `<ul class="stocks_list">${data.map(createStockEntryWithStatus).join('')}</ul>`;
@@ -52,6 +84,10 @@
         let number = parseFloat(num).toFixed(2);
 
         return ((number > 0) ? '+' : '') + number + '%';
+    }
+
+    function creteSearchStockEntry(stock, index, arr, uiStatus) {
+        return `<li>bla</li>`;
     }
 
     function creteStockEntry(stock, index, arr, uiStatus) {
@@ -176,16 +212,16 @@
 
     //******************** Public methods ************************
 
-    function render(stockData, uiState) {
+    function render(stocksData, uiState) {
         let hash = window.location.hash.slice(1);
 
         let container = document.getElementsByClassName('app_content')[0];
 
         if (!hash || hash === 'home') {
-            container.innerHTML = createMainHeader(uiState) + createFilter(uiState) + createStockList(stockData, uiState);
+            container.innerHTML = createMainHeader(uiState) + createFilter(uiState) + createStockList(stocksData, uiState);
             addEventListeners(container);
         } else if (hash === 'search') {
-            container.innerHTML = 'searching';
+            container.innerHTML = createSearchHeader(uiState) + createSearchStockList(stocksData, uiState);
         } else {
             container.innerHTML = "404";
         }
