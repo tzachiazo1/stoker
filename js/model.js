@@ -8,7 +8,7 @@
     let state = {
         uiStatus: {
             presentationIndex: 0,
-            isFilterOpen : true,
+            isFilterOpen : false,
             filterParameters : {
                 stockName : "",
                 trend : "all",
@@ -32,7 +32,6 @@
     }
 
     function setStocks(newStocksData) {
-        debugger;
         state.stocksData = newStocksData;
     }
 

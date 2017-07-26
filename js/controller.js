@@ -71,7 +71,7 @@ window.Stokr = window.Stokr || {};
         stockData.splice(newIndex, 0, removedStock[0]);
         callRender();
     }
-    
+
     function fatchStocks() {
         let query = "quotes?q=" + model.getState().myStocks.join(',');
         fetch(domain + query)
@@ -106,6 +106,10 @@ window.Stokr = window.Stokr || {};
         callRender();
     }
 
+    function refresh(){
+        fatchStocks();
+    }
+
 
     //***************************
     window.Stokr.Controller = {
@@ -115,6 +119,7 @@ window.Stokr = window.Stokr || {};
         toggleFilter,
         applyFilter,
         onHashChanged,
+        refresh,
     }
 
     fatchStocks();

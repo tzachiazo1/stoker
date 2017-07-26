@@ -167,6 +167,7 @@ body{
 
 .filter_form input , .filter_form select{
     font-size: 1.625rem;
+    outline: none;
 
 }
 
@@ -174,6 +175,7 @@ body{
     width: 66.66%;
     border-radius: 10px;
     border: 1px solid #e0e0e0;
+
 }
 
 .form_second_col input{
@@ -188,6 +190,8 @@ body{
     align-items: center;
     flex-wrap: wrap;
     justify-content: space-between;
+    padding-left: 0.5em;
+
 }
 
 .form_second_col{
@@ -196,6 +200,7 @@ body{
     align-items: center;
     flex-wrap: wrap;
     justify-content: space-between;
+    padding-left: 0.5em;
 }
 
 .apply_button{
@@ -207,6 +212,14 @@ body{
     /*padding: 1.6em;*/
     width: 5.3em;
     height: 5em;
-
 }
+
+.apply_button:active{
+    background-color: #29740f;
+}
+
+.action_button:active{
+    color: #29740f;
+}
+
 

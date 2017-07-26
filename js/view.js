@@ -59,7 +59,6 @@
         let disableUpButton = (index === 0);
         let disableDownButton = (index === arr.length - 1);
         let arrowVisibility = uiStatus.isFilterOpen ? "hidden_element" : "";
-        debugger;
         return `<li class="stock_line">
 
                 <span class="stock_line_name"> ${stock.Symbol} (${stock.Name})</span>
@@ -91,6 +90,8 @@
         let ctrl = window.Stokr.Controller;
         if (ev.target.dataset.actionname === 'filter') {
             ctrl.toggleFilter();
+        }else if(ev.target.dataset.actionname === 'refresh'){
+            ctrl.refresh();
         }
     }
 
