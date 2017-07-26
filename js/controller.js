@@ -10,7 +10,7 @@ window.Stokr = window.Stokr || {};
     let view = window.Stokr.View;
     let domain = 'http://localhost:7000/';
 
-    let changePresentationOptions = ['percent', 'number'];
+    let changePresentationOptions = ['percent', 'number', 'b'];
 
 
     function callRender() {
@@ -52,11 +52,17 @@ window.Stokr = window.Stokr || {};
         return true;
     }
 
+    function saveUIstateToLocalStorage(){
+        let uiStatus = model.getState().uiStatus;
+        localStorage.setItem('stokr_state', JSON.stringify(uiStatus));
+    }
+
     //**** public methods ********
 
     function toggleChangeFormat() {
         let state = model.getState();
         state.uiStatus.presentationIndex = (state.uiStatus.presentationIndex + 1) % changePresentationOptions.length;
+        saveUIstateToLocalStorage();
         callRender();
     }
 
@@ -82,8 +88,15 @@ window.Stokr = window.Stokr || {};
                 return Promise.reject('Request Failed');
             })
             .then(setStocksFromResult)
+            .then(loadUiStateFromLocalStorage)
             .then(callRender)
             .catch(console.error)
+    }
+
+    function loadUiStateFromLocalStorage(){
+        if(localStorage.stokr_state){
+            model.getState().uiStatus = JSON.parse(localStorage.getItem('stokr_state'));
+        }
     }
 
     function setStocksFromResult(result){
@@ -92,13 +105,14 @@ window.Stokr = window.Stokr || {};
 
     function toggleFilter() {
         model.getState().uiStatus.isFilterOpen = !model.getState().uiStatus.isFilterOpen;
+        saveUIstateToLocalStorage();
         callRender();
     }
 
     function applyFilter(filterParams) {
         let state = model.getState();
-
         state.uiStatus.filterParameters = filterParams;
+        saveUIstateToLocalStorage();
         callRender();
     }
 
@@ -109,7 +123,6 @@ window.Stokr = window.Stokr || {};
     function refresh(){
         fatchStocks();
     }
-
 
     //***************************
     window.Stokr.Controller = {

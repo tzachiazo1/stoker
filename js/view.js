@@ -8,14 +8,15 @@
 
     window.Stokr = window.Stokr || {};
 
-    let changeOptions = {
-        'percent': 0,
-        'number': 1,
-    }
+    // let changeOptions = {
+    //     'percent': 0,
+    //     'number': 1,
+    //     'MarketCapitalization': 2,
+    // };
 
     window.addEventListener('hashchange', hashchangeHandler);
-    
-    function hashchangeHandler(){
+
+    function hashchangeHandler() {
         let ctrl = window.Stokr.Controller;
         ctrl.toggleChangeFormat()
     }
@@ -41,33 +42,51 @@
         return `<ul class="stocks_list">${data.map(createStockEntryWithStatus).join('')}</ul>`;
     }
 
-    function trimNumber(num) {
+    function trimNumber(num, showSign) {
         let number = parseFloat(num).toFixed(2);
-
-        return ((number > 0)? '+' : '-') + number;
+        let sign = ((number > 0) ? '+' : '');
+        return ( showSign ? sign : '') + number;
     }
 
     function trimNumberPercent(num) {
         let number = parseFloat(num).toFixed(2);
 
-        return ((number > 0)? '+' : '-') + number + '%';
+        return ((number > 0) ? '+' : '') + number + '%';
     }
 
     function creteStockEntry(stock, index, arr, uiStatus) {
-        let stockChange = (uiStatus.presentationIndex === changeOptions['percent']) ? trimNumberPercent(stock.realtime_chg_percent) : trimNumber(stock.realtime_change);
+
+
+        let stockChange;
+        switch (uiStatus.presentationIndex) {
+            case 0:
+                stockChange = trimNumberPercent(stock.realtime_chg_percent);
+                break;
+            case 1:
+                stockChange = trimNumber(stock.realtime_change);
+                break;
+            case 2:
+                stockChange = (stock.MarketCapitalization);
+                break;
+        }
         let trend = (stock.realtime_change > 0) ? "positive_trend" : "negative_trend";
         let disableUpButton = (index === 0);
         let disableDownButton = (index === arr.length - 1);
         let arrowVisibility = uiStatus.isFilterOpen ? "hidden_element" : "";
-        return `<li class="stock_line">
 
+        const createUpButton = () =>
+            `<button class="sock_line_up_button icon-arrow ${(index === 0) ? 'icon_arrow_disable' : ''}" ${disableUpButton ? 'disabled' : ''} data-symbol="${stock.Symbol}"></button>`;
+        const createDownButton = () =>
+            `<button class="sock_line_down_button icon-arrow ${(index === arr.length - 1) ? 'icon_arrow_disable' : ''}" ${disableDownButton ? 'disabled' : ''} data-symbol="${stock.Symbol}" ></button>`;
+
+        return `<li class="stock_line">
                 <span class="stock_line_name"> ${stock.Symbol} (${stock.Name})</span>
                 <div class="sock_line_right_panel">
                 <span class ="stock_line_lastPrice"> ${trimNumber(stock.LastTradePriceOnly)}</span>
                 <button class="stock_line_change_btn ${trend}">${stockChange}</button>
                 <div class="stock_line_move_panel ${arrowVisibility}">
-                    <button class="sock_line_up_button icon-arrow ${(index === 0) ? 'icon_arrow_disable' : ''}" ${disableUpButton ? 'disabled' : ''} data-symbol="${stock.Symbol}"></button>
-                    <button class="sock_line_down_button icon-arrow ${(index === arr.length - 1) ? 'icon_arrow_disable' : ''}" ${disableDownButton ? 'disabled' : ''} data-symbol="${stock.Symbol}" ></button>
+                    ${createUpButton()}
+                    ${createDownButton()}
                 </div>
                 </div>
             </li>`;
@@ -90,7 +109,7 @@
         let ctrl = window.Stokr.Controller;
         if (ev.target.dataset.actionname === 'filter') {
             ctrl.toggleFilter();
-        }else if(ev.target.dataset.actionname === 'refresh'){
+        } else if (ev.target.dataset.actionname === 'refresh') {
             ctrl.refresh();
         }
     }
@@ -100,10 +119,10 @@
             return ``;
         }
 
-        let selectedTrend = uiState.filterParameters.trend;
-        let allSelected = (selectedTrend === 'all')? 'selected' : '';
-        let losingSelected = (selectedTrend === 'losing')? 'selected' : '';
-        let gainingSelected = (selectedTrend === 'gaining')? 'selected' : '';
+        const selectedTrend = uiState.filterParameters.trend;
+        const allSelected = (selectedTrend === 'all') ? 'selected' : '';
+        const losingSelected = (selectedTrend === 'losing') ? 'selected' : '';
+        const gainingSelected = (selectedTrend === 'gaining') ? 'selected' : '';
 
         return (`<section class="filter_section">
                       <form class="filter_form" id="filter_form">
@@ -136,13 +155,13 @@
         //Header Actions:
         container.querySelector(".main_header_action_list").addEventListener('click', actionClickCB);
         //Apply:
-        let filterForm = container.querySelector("#filter_form")
+        let filterForm = container.querySelector("#filter_form");
         if (filterForm) {
             filterForm.addEventListener('submit', submitFormCB);
         }
     }
-    
-    function submitFormCB(ev){
+
+    function submitFormCB(ev) {
         ev.preventDefault();
         let ctrl = window.Stokr.Controller;
         let formElements = ev.target.elements;
@@ -162,12 +181,12 @@
 
         let container = document.getElementsByClassName('app_content')[0];
 
-        if(!hash || hash === 'home'){
+        if (!hash || hash === 'home') {
             container.innerHTML = createMainHeader(uiState) + createFilter(uiState) + createStockList(stockData, uiState);
             addEventListeners(container);
-        }else if(hash == 'search'){
+        } else if (hash === 'search') {
             container.innerHTML = 'searching';
-        }else{
+        } else {
             container.innerHTML = "404";
         }
 
@@ -175,7 +194,7 @@
 
 
     //****************************************************************
-    
+
     window.Stokr.View = {
         render,
     }

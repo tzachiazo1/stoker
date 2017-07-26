@@ -19,7 +19,11 @@
 
         myStocks : [
             "WIX",
-            "MSFT"
+            "MSFT",
+            "NKE",
+            "GOOG",
+            "CSCO",
+            "VG",
         ],
 
         stocksData: []
