@@ -57,7 +57,7 @@
         }
 
         //show list of stocks
-        let createSearchStockEntryWithStatus = (stock, index, arr) => creteSearchStockEntry(stock, index, arr, uiStatus);
+        let createSearchStockEntryWithStatus = (stock) => creteSearchStockEntry(stock);
         return `<ul class="stocks_list">${stocks.map(createSearchStockEntryWithStatus).join('')}</ul>`;
 
     }
@@ -79,7 +79,7 @@
         return ((number > 0) ? '+' : '') + number + '%';
     }
 
-    function creteSearchStockEntry(stock, index, arr, uiStatus) {
+    function creteSearchStockEntry(stock) {
         return `<li class="search_stock_entry">
                   <div class = "search_result_title">
                     <span class="search_result_title_first" >${stock.symbol}</span>
@@ -193,8 +193,8 @@
         }
     }
 
-    function stockAddCB(ev){
-        if(ev.target.classList.contains("search_add_button")){
+    function stockAddCB(ev) {
+        if (ev.target.classList.contains("search_add_button")) {
             let symbol = ev.target.dataset.symbol;
             let ctrl = window.Stokr.Controller;
             ctrl.addStock(symbol);
@@ -205,8 +205,8 @@
     function addSearchEventListeners(container) {
         container.querySelector('.search_input').addEventListener('keypress', performSearchCB);
         let stockList = container.querySelector('.stocks_list');
-        if(stockList){
-            stockList.addEventListener('click' , stockAddCB);
+        if (stockList) {
+            stockList.addEventListener('click', stockAddCB);
         }
     }
 
