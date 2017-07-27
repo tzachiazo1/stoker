@@ -162,6 +162,14 @@ window.Stokr = window.Stokr || {};
         performSearch(searchTerm);
     }
 
+    function addStock(symbol) {
+        console.log(symbol);
+        model.getState().myStocks.push(symbol);
+
+        fatchStocks();
+        debugger;
+    }
+
     //***************************
     window.Stokr.Controller = {
         toggleChangeFormat,
@@ -172,6 +180,7 @@ window.Stokr = window.Stokr || {};
         onHashChanged,
         refresh,
         onSearch,
+        addStock,
     }
 
 

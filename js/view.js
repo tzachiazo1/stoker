@@ -8,12 +8,6 @@
 
     window.Stokr = window.Stokr || {};
 
-    // let changeOptions = {
-    //     'percent': 0,
-    //     'number': 1,
-    //     'MarketCapitalization': 2,
-    // };
-
     window.addEventListener('hashchange', hashchangeHandler);
 
     function hashchangeHandler() {
@@ -51,7 +45,6 @@
 
     function createSearchStockList(stocks, uiStatus) {
         if (!stocks || (stocks && stocks.length === 0)) {
-            //no search performed
             //load placeholder
             let phTitle = (!stocks) ? 'Search' : 'not found';
 
@@ -92,7 +85,7 @@
                     <span class="search_result_title_first" >${stock.symbol}</span>
                     <span>${stock.exchDisp}</span>
                   </div>
-                  <span class="search_add_button">+</span>
+                  <span class="search_add_button" data-symbol=${stock.symbol}>+</span>
                 </li>`;
     }
 
@@ -210,8 +203,21 @@
         }
     }
 
+    function stockAddCB(ev){
+        if(ev.target.classList.contains("search_add_button")){
+            let symbol = ev.target.dataset.symbol;
+            let ctrl = window.Stokr.Controller;
+            ctrl.addStock(symbol);
+            window.location.href = "#";
+        }
+    }
+
     function addSearchEventListeners(container) {
-        container.querySelector('.search_input').addEventListener('keypress', performSearchCB)
+        container.querySelector('.search_input').addEventListener('keypress', performSearchCB);
+        let stockList = container.querySelector('.stocks_list');
+        if(stockList){
+            stockList.addEventListener('click' , stockAddCB);
+        }
     }
 
     function submitFormCB(ev) {

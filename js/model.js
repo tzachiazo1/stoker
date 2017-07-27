@@ -22,10 +22,10 @@
             "WIX",
             "MSFT",
             "NKE",
-            "GOOG",
-            "AAPL",
-            "CSCO",
-            "VG",
+            // "GOOG",
+            // "AAPL",
+            // "CSCO",
+            // "VG",
         ],
 
         stocksData: []
