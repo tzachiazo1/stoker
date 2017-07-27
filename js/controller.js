@@ -25,8 +25,8 @@ window.Stokr = window.Stokr || {};
     function callRender() {
         let state = model.getState();
         if (state.uiStatus.isFilterOpen) {
-            let filterd = filterStocks(state.stocksData, state.uiStatus.filterParameters);
-            view.render(filterd, state.uiStatus);
+            let filtered = filterStocks(state.stocksData, state.uiStatus.filterParameters);
+            view.render(filtered, state.uiStatus);
         } else {
             view.render(state.stocksData, state.uiStatus);
         }
@@ -99,17 +99,33 @@ window.Stokr = window.Stokr || {};
 
     function moveStockPosition(stockKey, direction) {
         let stockData = model.getState().stocksData;
+        let myStocks =  model.getState().myStocks;
+
         let keyIndex = stockData.findIndex(function (elm) {
             return stockKey === elm.Symbol;
         });
 
         let newIndex = keyIndex + direction;
+
         let removedStock = stockData.splice(keyIndex, 1);
         stockData.splice(newIndex, 0, removedStock[0]);
+
+        removedStock = myStocks.splice(keyIndex, 1);
+        myStocks.splice(newIndex, 0, removedStock[0]);
+
+        saveMyStockListToLocalStorage();
         callRender();
     }
 
     function fatchStocks() {
+        let myStocks = loadMyStockListFromLocalStorage();
+        if(!myStocks){
+            myStocks = model.getState().mockData;
+        }
+
+        model.getState().myStocks = myStocks;
+        saveMyStockListToLocalStorage();
+
         let query = "quotes?q=" + model.getState().myStocks.join(',');
         fetch(domain + query)
             .then((response) => {
@@ -128,6 +144,18 @@ window.Stokr = window.Stokr || {};
         if (localStorage.stokr_state) {
             model.getState().uiStatus = JSON.parse(localStorage.getItem('stokr_state'));
         }
+    }
+
+    function loadMyStockListFromLocalStorage(){
+        if (localStorage.stokr_my_stocks) {
+            model.getState().myStocks = JSON.parse(localStorage.getItem('stokr_my_stocks'));
+            return model.getState().myStocks;
+        }
+    }
+
+    function saveMyStockListToLocalStorage(){
+        let myStocks = model.getState().myStocks;
+        localStorage.setItem('stokr_my_stocks', JSON.stringify(myStocks));
     }
 
     function setStocksFromResult(result) {
@@ -165,9 +193,9 @@ window.Stokr = window.Stokr || {};
     function addStock(symbol) {
         console.log(symbol);
         model.getState().myStocks.push(symbol);
-
-        fatchStocks();
+        saveMyStockListToLocalStorage();
         debugger;
+        fatchStocks();
     }
 
     //***************************

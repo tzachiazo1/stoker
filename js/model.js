@@ -19,6 +19,9 @@
         },
 
         myStocks : [
+        ],
+
+        mockData : [
             "WIX",
             "MSFT",
             "NKE",
