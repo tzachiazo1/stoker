@@ -12,8 +12,7 @@ window.Stokr = window.Stokr || {};
     let fetch_api = domain + "quotes?q=";
     let search_api = domain + 'search?q=';
 
-    let changePresentationOptions = ['percent', 'number', 'b'];
-
+    let changePresentationOptions = ['realtime_chg_percent', 'realtime_change', 'MarketCapitalization'];
 
     function initApp(){
         //init user's stock symbols
@@ -74,23 +73,13 @@ window.Stokr = window.Stokr || {};
         localStorage.setItem('stokr_state', JSON.stringify(uiStatus));
     }
 
-    function performSearch(searchTerm) {
-        let query = search_api + searchTerm;
-        fetch(query).then(response => {
-            if (response.ok) {
-                return response.json();
-            }
-            return Promise.reject('Bad Request');
-        }).then(response => response.ResultSet.Result)
-            .then(callRenderWithSearch);
-    }
-
 
     //**** public methods ********
 
     function toggleChangeFormat() {
         let state = model.getState();
-        state.uiStatus.presentationIndex = (state.uiStatus.presentationIndex + 1) % changePresentationOptions.length;
+        let currentStateIndex = changePresentationOptions.indexOf(state.uiStatus.presentationState);
+        state.uiStatus.presentationState = changePresentationOptions[(currentStateIndex + 1) % changePresentationOptions.length];
         saveUIstateToLocalStorage();
         callRender();
     }
@@ -99,8 +88,8 @@ window.Stokr = window.Stokr || {};
         let stockData = model.getState().stocksData;
         let myStocks =  model.getState().myStocks;
 
-        let keyIndex = stockData.findIndex(function (elm) {
-            return stockKey === elm.Symbol;
+        let keyIndex = stockData.findIndex(function (curStock) {
+            return stockKey === curStock.Symbol;
         });
 
         let newIndex = keyIndex + direction;
@@ -174,13 +163,18 @@ window.Stokr = window.Stokr || {};
     }
 
     function onSearch(searchTerm) {
-        console.log(searchTerm);
         model.getState().uiStatus.searchTerm = searchTerm;
-        performSearch(searchTerm);
+        let query = search_api + searchTerm;
+        fetch(query).then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            return Promise.reject('Bad Request');
+        }).then(response => response.ResultSet.Result)
+            .then(callRenderWithSearch);
     }
 
     function addStock(symbol) {
-        console.log(symbol);
         model.getState().myStocks.push(symbol);
         saveMyStockListToLocalStorage();
         fetchStocks();
@@ -198,7 +192,6 @@ window.Stokr = window.Stokr || {};
         onSearch,
         addStock,
     }
-
 
     initApp();
 

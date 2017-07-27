@@ -90,18 +90,8 @@
     }
 
     function creteStockEntry(stock, index, arr, uiStatus) {
-        let stockChange;
-        switch (uiStatus.presentationIndex) {
-            case 0:
-                stockChange = trimNumberPercent(stock.realtime_chg_percent);
-                break;
-            case 1:
-                stockChange = trimNumber(stock.realtime_change);
-                break;
-            case 2:
-                stockChange = (stock.MarketCapitalization);
-                break;
-        }
+
+        let stockChange = trimNumberPercent(stock[uiStatus.presentationState]);
         let trend = (stock.realtime_change > 0) ? "positive_trend" : "negative_trend";
         let disableUpButton = (index === 0);
         let disableDownButton = (index === arr.length - 1);

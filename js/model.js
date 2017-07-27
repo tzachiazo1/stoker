@@ -7,7 +7,7 @@
 
     let state = {
         uiStatus: {
-            presentationIndex: 0,
+            presentationState: 'realtime_chg_percent',
             isFilterOpen : false,
             searchTerm: "",
             filterParameters : {
