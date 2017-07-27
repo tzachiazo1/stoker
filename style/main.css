@@ -52,7 +52,7 @@ body {
 }
 
 .search_cancel {
-    color: #59737c;
+    color: #41bf15;
     font-size: 1.625rem;
     text-decoration: none;
     position: absolute;
@@ -90,6 +90,30 @@ body {
     color: #868686;
 }
 
+.search_stock_entry{
+    display: flex;
+    padding: 27px;
+    justify-content: space-between;
+    border-top: 1px solid #e5e5e5;
+    align-items: center;
+}
+
+.search_result_title{
+    font-size: 2rem;
+    
+}
+
+.search_result_title_first{
+    color: #59737c;
+    margin-right: 0.5em;
+}
+.search_add_button{
+    background-color: #41bf15;
+    font-size: 2rem;
+    color: white;
+    padding: 0.2em 0.5em;
+    border-radius: 10px;
+}
 .main_title {
     color: #41bf15;
     font-size: 2.4rem;

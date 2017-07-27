@@ -13,6 +13,15 @@ window.Stokr = window.Stokr || {};
     let changePresentationOptions = ['percent', 'number', 'b'];
 
 
+    function initApp(){
+        if(model.getState().searchTerm){
+            performSearch(model.uiStatus.searchTerm);
+        }else{
+            fatchStocks();
+        }
+    }
+
+
     function callRender() {
         let state = model.getState();
         if (state.uiStatus.isFilterOpen) {
@@ -22,6 +31,11 @@ window.Stokr = window.Stokr || {};
             view.render(state.stocksData, state.uiStatus);
         }
     }
+
+    function callRenderWithSearch(searchResult){
+        view.render(null, model.getState().uiStatus, searchResult);
+    }
+
 
     function filterStocks(stocks, parameters) {
         if (!parameters.stockName && parameters.trend === 'All' && !parameters.byRangeFrom && !parameters.byRangeTo) {
@@ -34,28 +48,45 @@ window.Stokr = window.Stokr || {};
     }
 
     function filter(stock, parameters) {
-        if(!stock.Symbol.toUpperCase().startsWith(parameters.stockName.toUpperCase()) && !stock.Name.toUpperCase().startsWith(parameters.stockName.toUpperCase())){
+        if (!stock.Symbol.toUpperCase().startsWith(parameters.stockName.toUpperCase()) && !stock.Name.toUpperCase().startsWith(parameters.stockName.toUpperCase())) {
             return false;
         }
         let trend = (stock.realtime_change > 0) ? 'gaining' : 'losing';
-        if(parameters.trend.toUpperCase() !== 'All'.toUpperCase() && trend.toUpperCase() !== parameters.trend.toUpperCase()){
+        if (parameters.trend.toUpperCase() !== 'All'.toUpperCase() && trend.toUpperCase() !== parameters.trend.toUpperCase()) {
             return false;
         }
 
         let dailyPercent = parseFloat(stock.realtime_chg_percent);
-        if(parameters.byRangeFrom === '' || parameters.byRangeTo === ''){
+        if (parameters.byRangeFrom === '' || parameters.byRangeTo === '') {
             return true;
         }
-        if((parseFloat(dailyPercent) < parameters.byRangeFrom || parseFloat(dailyPercent) > parameters.byRangeTo )){
+        if ((parseFloat(dailyPercent) < parameters.byRangeFrom || parseFloat(dailyPercent) > parameters.byRangeTo )) {
             return false;
         }
         return true;
     }
 
-    function saveUIstateToLocalStorage(){
+    function saveUIstateToLocalStorage() {
         let uiStatus = model.getState().uiStatus;
         localStorage.setItem('stokr_state', JSON.stringify(uiStatus));
     }
+
+    function performSearch(searchTerm) {
+        let query = 'search?q=' + searchTerm;
+        fetch(domain + query).then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            return Promise.reject('Bad Request');
+        }).then(showSearchResult)
+            .then(callRenderWithSearch);
+    }
+
+    function showSearchResult(response) {
+        return response.ResultSet.Result;
+    }
+
+
 
     //**** public methods ********
 
@@ -93,13 +124,13 @@ window.Stokr = window.Stokr || {};
             .catch(console.error)
     }
 
-    function loadUiStateFromLocalStorage(){
-        if(localStorage.stokr_state){
+    function loadUiStateFromLocalStorage() {
+        if (localStorage.stokr_state) {
             model.getState().uiStatus = JSON.parse(localStorage.getItem('stokr_state'));
         }
     }
 
-    function setStocksFromResult(result){
+    function setStocksFromResult(result) {
         model.setStocks(result.query.results.quote);
     }
 
@@ -120,8 +151,15 @@ window.Stokr = window.Stokr || {};
         callRender();
     }
 
-    function refresh(){
+    function refresh() {
         fatchStocks();
+    }
+
+    function onSearch(searchTerm) {
+        console.log(searchTerm);
+        model.getState().uiStatus.searchTerm = searchTerm;
+        //saveUIstateToLocalStorage();
+        performSearch(searchTerm);
     }
 
     //***************************
@@ -133,9 +171,12 @@ window.Stokr = window.Stokr || {};
         applyFilter,
         onHashChanged,
         refresh,
+        onSearch,
     }
 
-    fatchStocks();
+
+    initApp();
+
 })();
 
 

@@ -18,7 +18,7 @@
 
     function hashchangeHandler() {
         let ctrl = window.Stokr.Controller;
-        ctrl.toggleChangeFormat()
+        ctrl.onHashChanged()
     }
 
     function createMainHeader(uiStatus) {
@@ -42,7 +42,7 @@
         return `
     <header class="main_header">
        
-        <input class="search_input" type="text" value=${uiStatus.searchTerm}>
+        <input class="search_input" id="search_input" type="text" value=${uiStatus.searchTerm} >
         <a href="#" class="search_cancel" >Cancel</a>
         
       </header>
@@ -50,9 +50,11 @@
     }
 
     function createSearchStockList(stocks, uiStatus) {
-        if (!uiStatus.searchTerm || stocks.length === 0) {
-            //load placeholder - search
-            let phTitle = (stocks.length === 0)? 'not found' : 'Search';
+        if (!stocks || (stocks && stocks.length === 0)) {
+            //no search performed
+            //load placeholder
+            let phTitle = (!stocks) ? 'Search' : 'not found';
+
             return `<div class="search_ph search_ph_not_found">
                         <div class="search_ph_elements">
                             <span class="search_ph_image icon-search-place-holder"></span>
@@ -60,13 +62,11 @@
                         </div>
                     </div>`;
         }
-        else {
-            //show list of stocks
-            let createSearchStockEntryWithStatus = (stock, index, arr) => creteSearchStockEntry(stock, index, arr, uiStatus);
-            return `<ul class="stocks_list">${stocks.map(createSearchStockEntryWithStatus).join('')}</ul>`;
-        }
-        // let createStockEntryWithStatus = (stock, index, arr) => creteStockEntry(stock, index, arr, state);
-        //return `<ul class="stocks_list">${data.map(createStockEntryWithStatus).join('')}</ul>`;
+
+        //show list of stocks
+        let createSearchStockEntryWithStatus = (stock, index, arr) => creteSearchStockEntry(stock, index, arr, uiStatus);
+        return `<ul class="stocks_list">${stocks.map(createSearchStockEntryWithStatus).join('')}</ul>`;
+
     }
 
     function createStockList(data, state) {
@@ -87,12 +87,16 @@
     }
 
     function creteSearchStockEntry(stock, index, arr, uiStatus) {
-        return `<li>bla</li>`;
+        return `<li class="search_stock_entry">
+                  <div class = "search_result_title">
+                    <span class="search_result_title_first" >${stock.symbol}</span>
+                    <span>${stock.exchDisp}</span>
+                  </div>
+                  <span class="search_add_button">+</span>
+                </li>`;
     }
 
     function creteStockEntry(stock, index, arr, uiStatus) {
-
-
         let stockChange;
         switch (uiStatus.presentationIndex) {
             case 0:
@@ -197,6 +201,19 @@
         }
     }
 
+    function performSearchCB(ev) {
+        var key = ev.which || ev.keyCode;
+        if (key === 13) {
+            let ctrl = window.Stokr.Controller;
+            let input = ev.target.value;
+            ctrl.onSearch(input);
+        }
+    }
+
+    function addSearchEventListeners(container) {
+        container.querySelector('.search_input').addEventListener('keypress', performSearchCB)
+    }
+
     function submitFormCB(ev) {
         ev.preventDefault();
         let ctrl = window.Stokr.Controller;
@@ -212,7 +229,7 @@
 
     //******************** Public methods ************************
 
-    function render(stocksData, uiState) {
+    function render(stocksData, uiState, searchData) {
         let hash = window.location.hash.slice(1);
 
         let container = document.getElementsByClassName('app_content')[0];
@@ -221,7 +238,8 @@
             container.innerHTML = createMainHeader(uiState) + createFilter(uiState) + createStockList(stocksData, uiState);
             addEventListeners(container);
         } else if (hash === 'search') {
-            container.innerHTML = createSearchHeader(uiState) + createSearchStockList(stocksData, uiState);
+            container.innerHTML = createSearchHeader(uiState) + createSearchStockList(searchData, uiState);
+            addSearchEventListeners(container);
         } else {
             container.innerHTML = "404";
         }
