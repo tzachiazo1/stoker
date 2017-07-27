@@ -18,17 +18,12 @@
             }
         },
 
-        myStocks : [
-        ],
+        myStocks : [],
 
         mockData : [
             "WIX",
             "MSFT",
             "NKE",
-            // "GOOG",
-            // "AAPL",
-            // "CSCO",
-            // "VG",
         ],
 
         stocksData: []

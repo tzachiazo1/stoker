@@ -9,27 +9,32 @@ window.Stokr = window.Stokr || {};
     let model = window.Stokr.Model;
     let view = window.Stokr.View;
     let domain = 'http://localhost:7000/';
+    let fetch_api = domain + "quotes?q=";
+    let search_api = domain + 'search?q=';
 
     let changePresentationOptions = ['percent', 'number', 'b'];
 
 
     function initApp(){
-        if(model.getState().searchTerm){
-            performSearch(model.uiStatus.searchTerm);
-        }else{
-            fatchStocks();
+        //init user's stock symbols
+        let myStocks = loadMyStockListFromLocalStorage();
+        if(!myStocks){
+            myStocks = model.getState().mockData;
         }
+        model.getState().myStocks = myStocks;
+        saveMyStockListToLocalStorage();
+
+        fetchStocks();
     }
 
 
     function callRender() {
         let state = model.getState();
+        let stocksData = state.stocksData;
         if (state.uiStatus.isFilterOpen) {
-            let filtered = filterStocks(state.stocksData, state.uiStatus.filterParameters);
-            view.render(filtered, state.uiStatus);
-        } else {
-            view.render(state.stocksData, state.uiStatus);
+            stocksData = filterStocks(stocksData, state.uiStatus.filterParameters);
         }
+        view.render(stocksData, state.uiStatus);
     }
 
     function callRenderWithSearch(searchResult){
@@ -42,9 +47,7 @@ window.Stokr = window.Stokr || {};
             return stocks;
         }
 
-        let filtered = stocks.filter((stocks) => filter(stocks, parameters));
-
-        return filtered;
+        return stocks.filter((stocks) => filter(stocks, parameters));
     }
 
     function filter(stock, parameters) {
@@ -72,20 +75,15 @@ window.Stokr = window.Stokr || {};
     }
 
     function performSearch(searchTerm) {
-        let query = 'search?q=' + searchTerm;
-        fetch(domain + query).then(response => {
+        let query = search_api + searchTerm;
+        fetch(query).then(response => {
             if (response.ok) {
                 return response.json();
             }
             return Promise.reject('Bad Request');
-        }).then(showSearchResult)
+        }).then(response => response.ResultSet.Result)
             .then(callRenderWithSearch);
     }
-
-    function showSearchResult(response) {
-        return response.ResultSet.Result;
-    }
-
 
 
     //**** public methods ********
@@ -117,17 +115,9 @@ window.Stokr = window.Stokr || {};
         callRender();
     }
 
-    function fatchStocks() {
-        let myStocks = loadMyStockListFromLocalStorage();
-        if(!myStocks){
-            myStocks = model.getState().mockData;
-        }
-
-        model.getState().myStocks = myStocks;
-        saveMyStockListToLocalStorage();
-
-        let query = "quotes?q=" + model.getState().myStocks.join(',');
-        fetch(domain + query)
+    function fetchStocks() {
+        let query = fetch_api + model.getState().myStocks.join(',');
+        fetch(query)
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -180,13 +170,12 @@ window.Stokr = window.Stokr || {};
     }
 
     function refresh() {
-        fatchStocks();
+        fetchStocks();
     }
 
     function onSearch(searchTerm) {
         console.log(searchTerm);
         model.getState().uiStatus.searchTerm = searchTerm;
-        //saveUIstateToLocalStorage();
         performSearch(searchTerm);
     }
 
@@ -194,8 +183,7 @@ window.Stokr = window.Stokr || {};
         console.log(symbol);
         model.getState().myStocks.push(symbol);
         saveMyStockListToLocalStorage();
-        debugger;
-        fatchStocks();
+        fetchStocks();
     }
 
     //***************************
